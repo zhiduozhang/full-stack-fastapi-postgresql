@@ -11,7 +11,11 @@ WORKDIR /app
 HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 
 # Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt==1.0.0
+RUN pip install --no-cache-dir -r requirements.txt
+# Create a new user 'appuser'
+RUN adduser --disabled-password --gecos '' appuser
+# Use 'appuser' for running the container
+USER appuser
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
@@ -23,4 +27,4 @@ ENV NAME World
 CMD ["python", "app.py"]
 
 # Install pipx
-RUN /bin/sh -c python3 -m pip install --user pipx &&  python3 -m pipx ensurepath && pipx install poetry
+RUN /bin/sh -c python3 -m pip install --no-cache-dir --user pipx==0.16.0.0 &&  python3 -m pipx ensurepath && pipx install poetry==1.1.4
