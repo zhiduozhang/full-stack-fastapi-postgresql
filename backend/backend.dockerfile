@@ -7,15 +7,16 @@ WORKDIR /app
 # Run app.py when the container launches
 # Removed duplicate CMD instruction
 
-# Add a healthcheck
-HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
+# Install any needed packages specified in requirements.txt, create a new user 'appuser' and install curl
+RUN pip install --no-cache-dir -r requirements.txt && \
+    adduser --disabled-password --gecos '' appuser && \
+    apt-get update && apt-get install -y curl
 
-# Install any needed packages specified in requirements.txt
-RUN pip install --no-cache-dir -r requirements.txt
-# Create a new user 'appuser'
-RUN adduser --disabled-password --gecos '' appuser
 # Use 'appuser' for running the container
 USER appuser
+
+# Add a healthcheck
+HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
