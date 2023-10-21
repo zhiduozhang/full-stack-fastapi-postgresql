@@ -22,4 +22,4 @@ RUN pip install poetry
 # Configure poetry
 RUN poetry config virtualenvs.create false && poetry install --no-interaction --no-ansi
 USER appuser
-HEALTHCHECK CMD python /code/healthcheck.py || exit 1
+HEALTHCHECK CMD ["CMD-SHELL", "python /code/healthcheck.py || exit 1"]
