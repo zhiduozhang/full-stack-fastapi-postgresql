@@ -16,7 +16,7 @@ RUN pip install --no-cache-dir -r requirements.txt && \
 USER appuser
 
 # Add a healthcheck
-HEALTHCHECK CMD curl --fail http://localhost:80/ || exit 1
+HEALTHCHECK --interval=5m --timeout=3s CMD curl --fail http://localhost:80/ || exit 1
 
 # Make port 80 available to the world outside this container
 EXPOSE 80
